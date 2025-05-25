@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termux Python Tutorial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2d3748;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: -1;
+        }
+        
+        .content {
+            text-align: center;
+            padding: 40px;
+            max-width: 800px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #4f46e5, #06b6d4);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.3;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 40px;
+        }
+        
+        .youtube-btn {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(to right, #ff0000, #cc0000);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .youtube-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+        }
+        
+        .youtube-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .youtube-btn i {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .youtube-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .youtube-btn:hover::after {
+            transform: translateX(100%);
+        }
+        
+        /* Floating Button Styles */
+        .float-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+        
+        .float-redes {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+        }
+        
+        .float-redes a {
+            text-decoration: none;
+            color: white;
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
+            text-align: center;
+            border-radius: 16px;
+            margin: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 20px;
+        }
+        
+        .float-redes a:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+        
+        .float-redes a:nth-child(1) {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+        }
+        
+        .float-redes a:nth-child(2) {
+            background: linear-gradient(135deg, #333, #000);
+        }
+        
+        .float-redes a:nth-child(3) {
+            background: linear-gradient(135deg, #0088cc, #005f8b);
+        }
+        
+        .float-redes a:nth-child(4) {
+            background: linear-gradient(135deg, #4f46e5, #312e81);
+        }
+        
+        .btn-mas {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            text-align: center;
+            line-height: 64px;
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-mas:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        #btn-mas {
+            display: none;
+        }
+        
+        #btn-mas:checked~.float-redes {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        #btn-mas:checked~.btn-mas {
+            transform: rotate(135deg);
+        }
+        
+        /* Animated circles in background */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(79, 70, 229, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+        
+        .circles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+        
+        .circles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+        
+        .circles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+        
+        .circles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+        
+        .circles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+        
+        .circles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+        
+        .circles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+        
+        .circles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+        
+        .circles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+        
+        .circles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+        
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </div>
+    
+    <div class="content">
+        <h1>Termux Python Execution Guide</h1>
+        
+        <p class="description">
+            Want to run your Python scripts in Termux without giving risky storage permissions? 
+            In this video, I'll guide you step-by-step on how to safely execute Python files 
+            without accessing your device's internal storage. Perfect for privacy-focused users 
+            and ethical coders!<br><br>
+            Stay secure, stay smart — no storage access needed!
+        </p>
+        
+        <a href="https://youtu.be/7qpAGhFwgpY?si=hrH_HICvYwRrO29M" class="youtube-btn" target="_blank">
+            <i class="fab fa-youtube"></i> WATCH VIDEO
+        </a>
+    </div>
+    
+    <!-- Floating Button -->
+    <div class="float-container">
+        <input type="checkbox" id="btn-mas">
+        <div class="float-redes">
+            <a href="https://youtube.com/@errorplugs" class="fab fa-youtube" aria-label="YouTube"></a>
+            <a href="https://github.com/balaji579" class="fab fa-github" aria-label="GitHub"></a>
+            <a href="https://t.me/v_4tx" class="fab fa-telegram" aria-label="Telegram"></a>
+            <a href="https://clik.now/codeXbalaji" class="fab" aria-label="Website"><b>W</b></a>
+        </div>
+        <div class="btn-mas">
+            <label for="btn-mas" class="icon-mas2"><b>+</b></label>
+        </div>
+    </div>
+</body>
+</html>
